@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+                   
+<!--
+注解：
+namespace:映射java文件的全路径；
+id:对应java映射文件的方法 ；
+resultType: 方法的返回类型；
+-->
+
+<mapper namespace="com.sun.dao.AccountDao">
+<sql id="selectAll">
+  select * from user_table
+</sql> 
+  <!--  -->
+  <insert id="add">
+	  insert into user_table(id,user,password) values(#{id},#{user},#{password});
+	  <!--  user_table中的字段是表示数据库中的声明，而后面values中的字段表示的是类中的属性-->
+   </insert>
+   
+   <!--  -->
+   <select id="query" resultType="com.sun.domain.Account">
+      <include refid="selectAll"/> 
+      <where>
+          id=#{id}
+     </where>  
+   </select>
+   
+   <!-- 获得id -->
+   <select id="getId" parameterType="com.sun.domain.Account" resultType="java.lang.Integer">
+     select id,user,password from user_table
+     <where>
+    <if test="id !=null and id!=''">
+     and id=#{id} 
+     </if>
+      <if test="user !=null and user!=''">
+      and user like #{user}
+      </if> 
+      </where>
+   </select>
+   
+   <!--  -->
+   <delete id="delete">
+     delete from user_table where id=#{id};
+   </delete>
+   
+      
+</mapper>
